@@ -19,6 +19,6 @@ Este proyecto es una API REST desarrollada con Node.js y Express para la gestió
 ## Funcionalidad Extra
 *A definir.
 
-## ⚙️ Requisitos Previos
+## Requisitos Previos
 *   [Node.js](https://nodejs.org/) instalado.
 *   Servidor MySQL en ejecución.
