@@ -4,8 +4,9 @@
   "description": "TFI Grupo M - Materia Programación III\r Tecnicatura en Desarrollo Web - FCAD UNER 2026",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test-db": "node scripts/test_connection.js"
   },
   "repository": {
     "type": "git",
