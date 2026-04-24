@@ -1,4 +1,4 @@
-import pool from './db/conexion.js';
+import pool from '../db/conexion.js';
 
 export async function testConexion() {
     try {
