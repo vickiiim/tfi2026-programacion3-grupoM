@@ -7,7 +7,18 @@ Tecnicatura en Desarrollo Web - FCAD UNER 2026
 ---
 
 ## Descripción del Proyecto
-Este proyecto es una API REST desarrollada con Node.js y Express para la gestión de turnos de una clínica médica. El sistema permite la interacción de tres roles distintos (Médico, Paciente y Administrador) y gestiona entidades como usuarios, especialidades, obras sociales y reservas de turnos.
+Este sistema fue desarrollado con **Node.js**, **Express** y **MySQL**.
+
+La aplicación contempla distintos roles dentro de una clínica médica:
+
+- Administrador
+- Médico
+- Paciente
+
+En esta **primera entrega** se incluye:
+
+- BREAD funcional de la entidad **Especialidades**
+- Avance de funcionalidad extra: *A definir
 
 ## Tecnologías y Librerías Utilizadas
 *   **Backend:** Node.js, Express.
@@ -20,5 +31,22 @@ Este proyecto es una API REST desarrollada con Node.js y Express para la gestió
 *A definir.
 
 ## Requisitos Previos
-*   [Node.js](https://nodejs.org/) instalado.
-*   Servidor MySQL en ejecución.
+Antes de ejecutar el proyecto, se requiere:
+
+- Node.js instalado
+- MySQL en ejecución
+- phpMyAdmin, XAMPP, o similar
+- Cliente API (Postman, Bruno, etc.)
+
+## Estructura del Proyecto (Arquitectura)
+
+El proyecto fue organizado siguiendo una arquitectura modular por capas, utilizando **ES Modules** (`import / export`) para mantener el código ordenado, reutilizable y escalable.
+
+```bash
+/src
+ ├── controllers
+ ├── db
+ ├── middlewares
+ ├── routes
+ ├── scripts
+ └── services
