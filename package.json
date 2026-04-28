@@ -1,12 +1,20 @@
 {
+<<<<<<< HEAD
   "name": "tfi2026-programacion3-grupom",
+=======
+  "name": "trabajo-practico-prg-iii---grupo-m",
+>>>>>>> Victoria-Avances
   "version": "1.0.0",
   "description": "TFI Grupo M - Materia Programación III\r Tecnicatura en Desarrollo Web - FCAD UNER 2026",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "node index.js",
     "dev": "node --watch index.js",
     "test-db": "node scripts/test_connection.js"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> Victoria-Avances
   },
   "repository": {
     "type": "git",
@@ -15,13 +23,25 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "type": "module",
+=======
+  "type": "commonjs",
+>>>>>>> Victoria-Avances
   "bugs": {
     "url": "https://github.com/vickiiim/tfi2026-programacion3-grupoM/issues"
   },
   "homepage": "https://github.com/vickiiim/tfi2026-programacion3-grupoM#readme",
   "dependencies": {
+<<<<<<< HEAD
     "express": "^5.2.1",
     "mysql2": "^3.22.2"
+=======
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "mysql2": "^3.22.3"
+>>>>>>> Victoria-Avances
   }
 }
