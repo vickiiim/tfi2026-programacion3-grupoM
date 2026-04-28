@@ -1,25 +1,15 @@
-import express from "express";
+import express from 'express';
+import cors from 'cors';
+
+process.loadEnvFile();
 
 const app = express();
 
+// Middlewares
+app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    console.log(`test get`);
-
-    // res.status(404).send({'estado':'ok', 'msg': 'API OK'});
-    res.send({'estado':'ok', 'msg': 'API OK'});
-    
-})
-
-app.post('/especialidades', (req, res) => {
-    res.send({'estado':'ok', 'msg': 'Creado'});
-})
-
-process.loadEnvFile();
-const PUERTO = process.env.PUERTO;
-
-
-app.listen(PUERTO || 3000, () => {
+const PUERTO = process.env.PUERTO || 3000;
+app.listen(PUERTO, () => {
     console.log(`servidor iniciado OK en puerto ${PUERTO}`);
-})
+});

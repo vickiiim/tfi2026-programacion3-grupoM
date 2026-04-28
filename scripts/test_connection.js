@@ -23,4 +23,4 @@ export async function testConexion() {
     }
 }
 
-testConexion();
+export default testConexion;
