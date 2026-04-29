@@ -17,7 +17,7 @@ const options = {
     ],
   },
   // Aquí le decimos a Swagger dónde buscar los comentarios para documentar
-  apis: ['./routes/*.js'], 
+  apis: ['./src/routes/*.js'], 
 };
 
 const swaggerSpec = swaggerJSDoc(options);

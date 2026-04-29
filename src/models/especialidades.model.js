@@ -11,6 +11,11 @@ const Especialidad = {
         return rows;
     },
 
+    getByNombre: async (nombre) => {
+        const [rows] = await db.execute('SELECT * FROM especialidades WHERE nombre = ? AND activo = 1', [nombre]);
+        return rows; 
+    },
+
     create: async (nombre) => {
         const [result] = await db.execute('INSERT INTO especialidades (nombre, activo) VALUES (?, 1)', [nombre]);
         return result.insertId;

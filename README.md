@@ -38,6 +38,35 @@ Antes de ejecutar el proyecto, se requiere:
 - phpMyAdmin, XAMPP, o similar
 - Cliente API (Postman, Bruno, etc.)
 
+## Instalación y Ejecución
+
+1. Clonar el repositorio.
+2. Instalar las dependencias del proyecto:
+   \`\`\`bash
+   npm install
+   \`\`\`
+3. Configurar las variables de entorno (ver sección correspondiente).
+4. Ejecutar el proyecto utilizando alguno de los siguientes scripts:
+
+**Scripts disponibles:**
+- \`npm start\`: Inicia el servidor en modo producción (`node index.js`).
+- \`npm run dev\`: Inicia el servidor en modo desarrollo con reinicio automático (`node --watch index.js`).
+- \`npm run test-db\`: Ejecuta una prueba de conexión a la base de datos.
+- \`npm run test-models\`: Ejecuta pruebas sobre los modelos.
+
+## Configuración de Variables de Entorno
+Crea un archivo `.env` en la raíz del proyecto basándote en el archivo `.env.example` o agrega las siguientes variables:
+
+PORT=3000
+DB_HOST=localhost
+DB_USER=root
+DB_PASS=tu_contraseña
+DB_NAME=prog3_turnos
+
+## Documentación de la API (Swagger)
+La API está documentada utilizando Swagger. Una vez que el servidor esté en ejecución, puedes acceder a la interfaz gráfica de la documentación ingresando a:
+👉 `http://localhost:3000/api-docs`
+
 ## Estructura del Proyecto (Arquitectura)
 
 El proyecto fue organizado siguiendo una arquitectura modular por capas, utilizando **ES Modules** (`import / export`) para mantener el código ordenado, reutilizable y escalable.
@@ -46,6 +75,7 @@ El proyecto fue organizado siguiendo una arquitectura modular por capas, utiliza
 /src
  ├── controllers
  ├── db
+ ├── docs
  ├── middlewares
  ├── models
  ├── routes
