@@ -47,6 +47,7 @@ El proyecto fue organizado siguiendo una arquitectura modular por capas, utiliza
  ├── controllers
  ├── db
  ├── middlewares
+ ├── models
  ├── routes
  ├── scripts
  └── services

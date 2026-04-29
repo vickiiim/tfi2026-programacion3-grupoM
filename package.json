@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test-db": "node scripts/test_connection.js",
-    "test-models": "node scripts/test_models.js"
+    "test-db": "node src/scripts/test_connection.js",
+    "test-models": "node src/scripts/test_models.js"
   },
   "repository": {
     "type": "git",
