@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { setupSwagger } from './docs/swagger.js';
+import { setupSwagger } from './src/docs/swagger.js';
 
 process.loadEnvFile();
 
