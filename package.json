@@ -4,10 +4,10 @@
   "description": "TFI Grupo M - Materia Programación III\r Tecnicatura en Desarrollo Web - FCAD UNER 2026",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
-    "test-db": "node scripts/test_connection.js",
-    "test-models": "node scripts/test_models.js"
+    "start": "node src/ index.js",
+    "dev": "node --watch src/ index.js",
+    "test-db": "node src/ scripts/test_connection.js",
+    "test-models": "node src/ scripts/test_models.js"
   },
   "repository": {
     "type": "git",
