@@ -18,7 +18,6 @@ La aplicación contempla distintos roles dentro de una clínica médica:
 En esta **primera entrega** se incluye:
 
 - BREAD funcional de la entidad **Especialidades**
-- Avance de funcionalidad extra: *A definir
 
 ## Tecnologías y Librerías Utilizadas
 *   **Backend:** Node.js, Express.

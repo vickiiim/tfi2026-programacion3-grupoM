@@ -8,7 +8,7 @@
     "dev": "node --watch index.js",
     "test-db": "node src/scripts/test_connection.js",
     "test-models": "node src/scripts/test_models.js"
-},
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vickiiim/tfi2026-programacion3-grupoM.git"
@@ -25,6 +25,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.22.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

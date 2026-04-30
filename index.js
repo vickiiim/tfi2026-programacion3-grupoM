@@ -1,18 +1,19 @@
+process.loadEnvFile();
+
 import express from 'express';
 import cors from 'cors';
 import { setupSwagger } from './src/docs/swagger.js';
-
-process.loadEnvFile();
+import especialidadesRoutes from './src/routes/especialidades.routes.js'; 
+import authRoutes from './src/routes/auth.routes.js';
 
 const app = express();
 
-// Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); 
+app.use('/api/especialidades', especialidadesRoutes);
+app.use('/api', authRoutes);
 
-// --- ESTO ES LO QUE FALTA ---
 setupSwagger(app); 
-// ----------------------------
 
 const PUERTO = process.env.PUERTO || 3000;
 app.listen(PUERTO, () => {

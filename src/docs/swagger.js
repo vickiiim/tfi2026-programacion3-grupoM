@@ -15,8 +15,22 @@ const options = {
         description: 'Servidor Local',
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    // ---------------------------------------------------------
   },
-  // Aquí le decimos a Swagger dónde buscar los comentarios para documentar
   apis: ['./src/routes/*.js'], 
 };
 
