@@ -77,7 +77,7 @@ DB_USER=usuario_tfi
 DB_PASS=tu_contraseña
 DB_NAME=prog3_turnos
 
-# Seguridad JWT
+- Seguridad JWT
 SECRET_KEY=tu_clave_secreta
 
 ## Documentación de la API (Swagger)
