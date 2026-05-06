@@ -1,16 +1,15 @@
 import { Router } from 'express';
 import { check, param } from 'express-validator';
-import especialidadesController from '../controllers/especialidades.controller.js';
-import validarCampos from '../middlewares/validar_campos.js';
-import validarJWT from '../middlewares/validar_jwt.js';   
-import { esAdmin } from '../middlewares/validar_roles.js';
-
+import especialidadesController from '../../controllers/especialidades.controller.js';
+import validarCampos from '../../middlewares/validar_campos.js';
+import validarJWT from '../../middlewares/validar_jwt.js';   
+import { esAdmin } from '../../middlewares/validar_roles.js';
 
 const router = Router();
 
 /**
  * @swagger
- * /api/especialidades:
+ * /api/v1/especialidades:  
  *   get:
  *     summary: Obtiene todas las especialidades activas.
  *     tags: [Especialidades]
@@ -27,7 +26,7 @@ router.get('/',
 
 /**
  * @swagger
- * /api/especialidades/{id}:
+ * /api/v1/especialidades/{id}:
  *   get:
  *     summary: Obtiene una especialidad específica por su ID.
  *     tags: [Especialidades]
@@ -52,7 +51,7 @@ router.get('/:id',
 
 /**
  * @swagger
- * /api/especialidades:
+ * /api/v1/especialidades: 
  *   post:
  *     summary: Crea una nueva especialidad (SOLO ADMIN).
  *     tags: [Especialidades]
@@ -83,17 +82,38 @@ router.post('/',
 
 /**
  * @swagger
- * /api/especialidades/{id}:
+ * /api/v1/especialidades/{id}:
  *   put:
  *     summary: Modifica una especialidad existente (SOLO ADMIN).
  *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
+ *         schema:
+ *           type: integer
  *         required: true
+ *         description: ID numérico de la especialidad a modificar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "TRAUMATOLOGÍA INFANTIL"
  *     responses:
  *       200:
- *         description: Especialidad modificada.
+ *         description: Especialidad modificada con éxito.
+ *       400:
+ *         description: Error de validación (ej. el nombre está vacío o ya existe).
+ *       404:
+ *         description: Especialidad no encontrada.
+ *       500:
+ *         description: Error interno del servidor.
  */
 router.put('/:id', 
     [
@@ -109,7 +129,7 @@ router.put('/:id',
 
 /**
  * @swagger
- * /api/especialidades/{id}:
+ * /api/v1/especialidades/{id}: 
  *   delete:
  *     summary: Realiza un borrado lógico (SOLO ADMIN).
  *     tags: [Especialidades]
@@ -117,6 +137,11 @@ router.put('/:id',
  *       - in: path
  *         name: id
  *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Especialidad eliminada con éxito.
  */
 router.delete('/:id', 
     [

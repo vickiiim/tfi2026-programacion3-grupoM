@@ -1,8 +1,9 @@
 import pool from '../db/conexion.js';
 
 export async function testConexion() {
+    let con;
     try {
-        const con = await pool.getConnection();
+        con = await pool.getConnection();
         console.log("Conexión con base de datos OK");
 
         const [results] = await con.query(
@@ -20,6 +21,10 @@ export async function testConexion() {
             msg: error.message
         });
         process.exit(1);
+    } finally {
+        if (con) con.release();
+        await pool.end();
+        console.log("Liberando recursos... Pool cerrado");
     }
 }
 
