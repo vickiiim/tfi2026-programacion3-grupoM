@@ -37,6 +37,21 @@ Antes de ejecutar el proyecto, se requiere:
 - phpMyAdmin, XAMPP, o similar
 - Cliente API (Postman, Bruno, etc.)
 
+## Conexión Base de Datos
+1. Crear la base de datos oficial del proyecto
+CREATE DATABASE prog3_turnos;
+
+2. Crear un usuario específico para la aplicación (reemplazar 'tu_contraseña' por la que desees)
+CREATE USER 'usuario_tfi'@'localhost' (o db-host) IDENTIFIED BY 'tu_contraseña';
+
+3. Otorgar solo los privilegios necesarios (leer, insertar y modificar)
+GRANT SELECT, INSERT, UPDATE ON prog3_turnos.* TO 'usuario_tfi'@'localhost';
+
+4. Refrescar los privilegios para aplicar los cambios
+FLUSH PRIVILEGES;
+
+5. Importar el archivo SQL de la cátedra.
+
 ## Instalación y Ejecución
 
 1. Clonar el repositorio.
@@ -58,9 +73,12 @@ Crea un archivo `.env` en la raíz del proyecto basándote en el archivo `.env.e
 
 PORT=3000
 DB_HOST=localhost
-DB_USER=root
+DB_USER=usuario_tfi
 DB_PASS=tu_contraseña
 DB_NAME=prog3_turnos
+
+# Seguridad JWT
+SECRET_KEY=tu_clave_secreta
 
 ## Documentación de la API (Swagger)
 La API está documentada utilizando Swagger. Una vez que el servidor esté en ejecución, puedes acceder a la interfaz gráfica de la documentación ingresando a:
