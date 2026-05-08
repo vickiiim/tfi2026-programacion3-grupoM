@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-04-2026 a las 21:18:28
+-- Tiempo de generación: 23-04-2026 a las 23:47:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -20,19 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `prog3_turnos`
 --
-
-DELIMITER $$
---
--- Procedimientos
---
-CREATE DEFINER=`root`@`localhost` PROCEDURE `especialidades_x_turnos` ()   select count(e.id_especialidad) as cant_esp, e.nombre
-from turnos_reservas as tr 
-inner join medicos as m on m.id_medico = tr.id_medico
-inner join especialidades as e on e.id_especialidad = m.id_especialidad
-GROUP by e.nombre
-HAVING cant_esp > 1$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -220,13 +207,11 @@ INSERT INTO `usuarios` (`id_usuario`, `documento`, `apellido`, `nombres`, `email
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `v_medicos` (
-`id_paciente` int(10) unsigned
+`id_medico` int(10) unsigned
 ,`id_usuario` int(10) unsigned
 ,`apellido` varchar(100)
 ,`nombres` varchar(100)
 ,`email` varchar(255)
-,`id_obra_social` int(10) unsigned
-,`descripcion_obra_social` varchar(255)
 ,`foto_path` varchar(255)
 );
 
@@ -254,7 +239,7 @@ CREATE TABLE `v_pacientes` (
 --
 DROP TABLE IF EXISTS `v_medicos`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `p`.`id_paciente` AS `id_paciente`, `p`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `os`.`id_obra_social` AS `id_obra_social`, `os`.`descripcion` AS `descripcion_obra_social`, `u`.`foto_path` AS `foto_path` FROM ((`pacientes` `p` join `usuarios` `u` on(`p`.`id_usuario` = `u`.`id_usuario`)) join `obras_sociales` `os` on(`p`.`id_obra_social` = `os`.`id_obra_social`)) WHERE `u`.`activo` = 1 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `u`.`foto_path` AS `foto_path` FROM (`medicos` `m` join `usuarios` `u` on(`m`.`id_usuario` = `u`.`id_usuario`)) WHERE `u`.`activo` = 1 ;
 
 -- --------------------------------------------------------
 
@@ -333,7 +318,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `especialidades`
 --
 ALTER TABLE `especialidades`
-  MODIFY `id_especialidad` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_especialidad` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `medicos`
