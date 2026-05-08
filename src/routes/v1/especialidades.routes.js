@@ -4,6 +4,7 @@ import especialidadesController from '../../controllers/especialidades.controlle
 import validarCampos from '../../middlewares/validar_campos.js';
 import validarJWT from '../../middlewares/validar_jwt.js';   
 import { esAdmin } from '../../middlewares/validar_roles.js';
+import upload from '../../middlewares/multer.middleware.js'; 
 
 const router = Router();
 
@@ -152,5 +153,7 @@ router.delete('/:id',
     ], 
     especialidadesController.borrar
 );
+
+router.post('/', upload.single('imagen_prueba'), especialidadesController.crear);
 
 export default router;

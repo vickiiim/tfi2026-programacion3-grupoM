@@ -1,10 +1,27 @@
 import db from '../db/conexion.js';
 
 const Especialidad = {
-    getAll: async () => {
-        const [rows] = await db.query('SELECT * FROM especialidades WHERE activo = 1');
+    getAll: async (parametrosBusqueda = {}) => {
+        const limit = parametrosBusqueda.limit || 10;
+        const offset = parametrosBusqueda.offset || 0;
+        const order = parametrosBusqueda.order === 'DESC' ? 'DESC' : 'ASC';
+        const nombre = parametrosBusqueda.nombre || null;
+
+        let sql = 'SELECT * FROM especialidades WHERE activo = 1';
+        const valores = [];
+
+        if (nombre) {
+            sql += ' AND nombre LIKE ?';
+            valores.push(`%${nombre}%`); 
+        }
+
+        sql += ` ORDER BY nombre ${order} LIMIT ? OFFSET ?`;
+        valores.push(limit, offset);
+
+        const [rows] = await db.execute(sql, valores);
         return rows;
     },
+
 
     getById: async (id) => {
         const [rows] = await db.execute('SELECT * FROM especialidades WHERE id_especialidad = ? AND activo = 1', [id]);

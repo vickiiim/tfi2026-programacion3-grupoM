@@ -32,8 +32,8 @@ const extraerFilas = (resultadoQuery) => {
 // -------------------------------------------------------------------------
 
 // 1. BROWSE
-const obtenerTodas = async () => {
-    const resultado = await especialidadesModel.getAll();
+const obtenerTodas = async (parametrosBusqueda = {}) => { 
+    const resultado = await especialidadesModel.getAll(parametrosBusqueda); 
     const rows = extraerFilas(resultado);
     
     return rows.map(transformarEspecialidadDTO);
@@ -44,9 +44,10 @@ const obtenerPorId = async (id) => {
     const resultado = await especialidadesModel.getById(id);
     const rows = extraerFilas(resultado);
     
-    // Si no hay nada en el array
     if (!rows || rows.length === 0) {
-        throw new Error("Especialidad no encontrada");
+        const error = new Error("Especialidad no encontrada");
+        error.status = 404; 
+        throw error;
     }
     
     // Le pasamos al DTO solo el primer objeto del array
@@ -59,7 +60,9 @@ const crear = async (datos) => {
     const rowsExistente = extraerFilas(resultadoExistente);
     
     if (rowsExistente.length > 0) {
-        throw new Error("Error de duplicación: Ya existe una especialidad con ese nombre");
+        const error = new Error("Error de duplicación: Ya existe una especialidad con ese nombre");
+        error.status = 400;  
+        throw error;
     }
 
     const resultadoInsert = await especialidadesModel.create(datos.nombre);
@@ -72,18 +75,22 @@ const actualizar = async (id, datos) => {
     const rowsData = extraerFilas(resultadoData);
 
     if (!rowsData || rowsData.length === 0) {
-        throw new Error("Especialidad no encontrada: No se puede editar porque no existe");
+        const error = new Error("Especialidad no encontrada: No se puede editar porque no existe");
+        error.status = 404; // 
+        throw error;
     }
 
     // Si extraerFilas devolvió el array, tomamos el primer elemento
     const especialidadActual = Array.isArray(rowsData) ? rowsData[0] : rowsData; 
     
-    if (datos.nombre && datos.nombre !== especialidadActual.nombre) { 
+ if (datos.nombre && datos.nombre !== especialidadActual.nombre) { 
         const resultadoOcupado = await especialidadesModel.getByNombre(datos.nombre);
         const nombreOcupado = extraerFilas(resultadoOcupado);
         
         if (nombreOcupado.length > 0) {
-            throw new Error("El nuevo nombre ya existe y está siendo usado por otra especialidad");
+            const error = new Error("El nuevo nombre ya existe y está siendo usado por otra especialidad");
+            error.status = 400; //
+            throw error;
         }
     }
 
@@ -97,7 +104,9 @@ const borrar = async (id) => {
     const rowsActual = extraerFilas(resultadoActual);
 
     if (!rowsActual || rowsActual.length === 0) {
-        throw new Error("Especialidad no encontrada: No se puede borrar porque no existe");
+        const error = new Error("Especialidad no encontrada: No se puede borrar porque no existe");
+        error.status = 404; // <-- No encontrado
+        throw error;
     }
 
     const resultadoDelete = await especialidadesModel.delete(id);
