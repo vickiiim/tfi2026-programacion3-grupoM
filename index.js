@@ -4,6 +4,7 @@ import express from 'express';
 import { setupSwagger } from './src/docs/swagger.js';
 import authRoutes from './src/routes/auth.routes.js';
 import especialidadesRouterV1 from './src/routes/v1/especialidades.routes.js';
+import pacientesRoutes from './src/routes/v2/pacientes.routes.js';
 
 import corsMiddleware from './src/middlewares/cors.middleware.js';
 import helmetMiddleware from './src/middlewares/helmet.middleware.js';
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use('/api/especialidades', especialidadesRouterV1);
 app.use('/api/v1/especialidades', especialidadesRouterV1);
+app.use('/api/v2/pacientes', pacientesRoutes);
 app.use('/api', authRoutes);
 
 setupSwagger(app);
