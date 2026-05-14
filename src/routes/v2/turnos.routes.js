@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import TurnosController from '../../controllers/turnos.controller.js';
+import * as turnosController from '../../controllers/turnos.controller.js';
 import { check, param } from 'express-validator';
 import validarCampos from '../../middlewares/validar_campos.js';
 import validarJWT from '../../middlewares/validar_jwt.js';
 import { validarRoles } from '../../middlewares/validar_roles.js';
 
 const router = Router();
-const turnosController = new TurnosController();
-
 
 /**
  * @swagger
