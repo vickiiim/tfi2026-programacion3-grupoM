@@ -1,14 +1,65 @@
+import pool from '../db/conexion.js';
 
-import usuariosModel from '../models/usuarios.model.js'; 
+const crearUsuario = async (datos) => {
+    const {
+        nombres,
+        apellido,
+        documento,
+        email,
+        contrasenia,
+        foto,
+        rol
+    } = datos;
 
-export const login = async (email, password) => {
-    const rows = await usuariosModel.verificarCredenciales(email, password);
+    const sql = `
+        INSERT INTO usuarios
+        (
+            nombres,
+            apellido,
+            documento,
+            email,
+            contrasenia,
+            foto,
+            rol,
+            activo
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+    `;
 
-    if (!rows || rows.length === 0) {
-        const error = new Error("Credenciales inválidas");
-        error.status = 401; 
-        throw error;
-    }
+    const [result] = await pool.execute(sql, [
+        nombres,
+        apellido,
+        documento,
+        email,
+        contrasenia,
+        foto,
+        rol
+    ]);
 
-    return rows[0]; 
+    return result;
+};
+
+const verificarCredenciales = async (email) => {
+    const sql = `
+        SELECT 
+            id_usuario,
+            documento,
+            apellido,
+            nombres,
+            email,
+            rol,
+            contrasenia
+        FROM usuarios
+        WHERE email = ?
+        AND activo = 1
+    `;
+
+    const [rows] = await pool.execute(sql, [email]);
+
+    return rows;
+};
+
+export default {
+    crearUsuario,
+    verificarCredenciales
 };

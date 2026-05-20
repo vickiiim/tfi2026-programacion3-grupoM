@@ -1,49 +1,51 @@
 import express from 'express';
-import { check } from 'express-validator';
-import validarCampos from '../middlewares/validar_campos.js';
-import { login } from '../controllers/usuarios.controller.js';
+
+import {
+  register,
+  login
+} from '../controllers/userController.js';
+
+const router = express.Router();
 
 /**
  * @swagger
- * /api/login:
+ * /api/usuarios/register:
  *   post:
- *     summary: Iniciar sesión y obtener token JWT
- *     tags: [Autenticación]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: lopmar@correo.com
- *               password:
- *                 type: string
- *                 format: password
- *                 example: benhor
+ *     tags:
+ *       - Usuarios
+ *     summary: Registrar usuario
+ *     responses:
+ *       201:
+ *         description: Usuario registrado correctamente
+ */
+router.post('/register', register);
+
+/**
+ * @swagger
+ * /api/usuarios/login:
+ *   post:
+ *     tags:
+ *       - Usuarios
+ *     summary: Login de usuario
  *     responses:
  *       200:
- *         description: Login exitoso. Devuelve el token JWT.
- *       400:
- *         description: Faltan datos o el formato es incorrecto.
- *       401:
- *         description: Credenciales inválidas.
+ *         description: Login correcto
  */
-const router = express.Router();
+router.post('/login', login);
 
-router.post('/login', 
-    [
-        check('email', 'El correo electrónico es obligatorio y debe ser válido').isEmail(),
-        check('password', 'La contraseña es obligatoria').not().isEmpty(),
-        validarCampos
-    ], 
-    login 
-);
+/**
+ * @swagger
+ * /api/usuarios/test:
+ *   get:
+ *     tags:
+ *       - Usuarios
+ *     summary: Endpoint de prueba
+ *     responses:
+ *       200:
+ *         description: Funciona correctamente
+ */
+router.get('/test', (req, res) => {
+  res.send('OK');
+});
 
 export default router;

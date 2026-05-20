@@ -1,28 +1,86 @@
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { login as loginService } from '../services/usuarios.service.js';
 
-export const login = async (req, res, next) => { // 1. Agregamos 'next'
+export const register = async (req, res) => {
+
     try {
-        const { email, password } = req.body;
 
-        const datosUsuario = await loginService(email, password);
+        const {
+            nombres,
+            apellido,
+            documento,
+            email,
+            password,
+            id_rol
+        } = req.body;
 
-        // Generamos el token
-        const token = jwt.sign(
-            { 
-                id_usuario: datosUsuario.id_usuario, 
-                rol: datosUsuario.rol 
-            },
-            process.env.SECRET_KEY,
-            { expiresIn: '2h' } // El token caducará en 2 horas
-        );
+        const fotoPath =
+            req.file
+                ? req.file.filename
+                : null;
 
-        return res.status(200).json({ 
-            mensaje: "Login exitoso", 
-            token: token 
+        const salt = await bcrypt.genSalt(10);
+
+        const passwordEncriptada =
+            await bcrypt.hash(password, salt);
+
+        console.log('Usuario a guardar:', {
+            nombres,
+            apellido,
+            documento,
+            email,
+            passwordEncriptada,
+            id_rol,
+            fotoPath
+        });
+
+        res.status(201).json({
+            mensaje: 'Usuario registrado con éxito',
+            foto: fotoPath
         });
 
     } catch (error) {
-        next(error); 
+
+        res.status(500).json({
+            error: error.message
+        });
+
+    }
+};
+
+export const login = async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+
+        console.log('LOGIN NUEVO EJECUTANDO');
+
+        const token = jwt.sign(
+
+            {
+                id: 1,
+                rol: 1
+            },
+
+            'clave_secreta_tfi',
+
+            {
+                expiresIn: '1h'
+            }
+
+        );
+
+        res.json({
+            mensaje: 'Login exitoso',
+            token
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            error: error.message
+        });
+
     }
 };
