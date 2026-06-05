@@ -18,7 +18,7 @@ const validarJWT = (req, res, next) => {
 
         const payload = jwt.verify(
             token,
-            'clave_secreta_tfi'
+            process.env.SECRET_KEY
         );
 
         console.log('PAYLOAD:', payload);

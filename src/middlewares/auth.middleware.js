@@ -4,35 +4,32 @@ export const verificarToken = (req, res, next) => {
 
     const authHeader = req.headers['authorization'];
 
-    const token =
-        authHeader &&
-        authHeader.split(' ')[1];
+    // Extraemos el token del formato "Bearer <token>"
+    const token = authHeader && authHeader.split(' ')[5];
 
     if (!token) {
-
         return res.status(401).json({
+            estado: false,
             mensaje: 'Acceso denegado: No se proporcionó un token'
         });
-
     }
 
     try {
-
         const verificado = jwt.verify(
             token,
-            process.env.JWT_SECRET || 'clave_secreta_tfi'
+            process.env.SECRET_KEY 
         );
 
-        req.user = verificado;
+        req.usuario = verificado;
 
         next();
 
     } catch (error) {
-
-        res.status(403).json({
-            mensaje: 'Token no válido o expirado'
+        return res.status(401).json({
+            estado: false,
+            mensaje: 'Token no válido o expirado',
+            detalle: error.message
         });
-
     }
 };
 
@@ -40,20 +37,19 @@ export const tieneRol = (...rolesPermitidos) => {
 
     return (req, res, next) => {
 
-        if (!req.user) {
-
+        if (!req.usuario) {
             return res.status(401).json({
+                estado: false,
                 mensaje: 'Usuario no autenticado'
             });
-
         }
 
-        if (!rolesPermitidos.includes(req.user.rol)) {
-
+        // Verificamos si el rol del usuario está dentro de los roles permitidos
+        if (!rolesPermitidos.includes(req.usuario.rol)) {
             return res.status(403).json({
-                mensaje: `Acceso denegado: Tu rol (${req.user.rol}) no tiene permiso para esta acción`
+                estado: false,
+                mensaje: `Acceso denegado: Tu rol (${req.usuario.rol}) no tiene permiso para esta acción`
             });
-
         }
 
         next();
