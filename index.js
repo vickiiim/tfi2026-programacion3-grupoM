@@ -23,27 +23,18 @@ app.use(rateLimitMiddleware);
 app.use(morganMiddleware);
 app.use(express.json());
 
-<<<<<<< HEAD
 // --- RUTAS V1 ---
-app.use('/api/especialidades', especialidadesRouterV1); 
-app.use('/api/v1/especialidades', especialidadesRouterV1);
-
-// --- RUTAS V2 ---
-app.use('/api/v2/especialidades', especialidadesRouterV1); 
-app.use('/api/v2/turnos', turnosRoutes);
-
-// --- RUTAS GLOBALES ---
-app.use('/api', authRoutes);
-=======
-app.use('/uploads', express.static('uploads'));
-
 app.use('/api/especialidades', especialidadesRouterV1);
 app.use('/api/v1/especialidades', especialidadesRouterV1);
 
-app.use('/api/v2', authRoutes); 
-app.use('/api/v2/usuarios', usuariosRoutes); 
+// --- RUTAS V2 ---
+app.use('/api/v2/especialidades', especialidadesRouterV1);
+app.use('/api/v2/turnos', turnosRoutes);
+app.use('/api/v2', authRoutes);
+app.use('/api/v2/usuarios', usuariosRoutes);
 
->>>>>>> abd67bdb72a6bc023aa43ae232f7d33f7faeb752
+// --- CONFIGURACIÓN DE ESTÁTICOS (MULTER) ---
+app.use('/uploads', express.static('uploads'));
 
 setupSwagger(app);
 
