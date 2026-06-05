@@ -2,7 +2,7 @@
   "name": "tfi2026-programacion3-grupom",
   "version": "1.0.0",
   "description": "TFI Grupo M - Materia Programación III\r Tecnicatura en Desarrollo Web - FCAD UNER 2026",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/vickiiim/tfi2026-programacion3-grupoM#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.1",
