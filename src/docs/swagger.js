@@ -7,7 +7,7 @@ const options = {
     info: {
       title: 'API TFI Programación III - Grupo M',
       version: '1.0.0',
-      description: 'Documentación de la API para el Trabajo Final Integrador. Incluye la gestión de especialidades, usuarios y turnos.',
+      description: 'Documentación de la API para el Trabajo Final Integrador. Incluye la gestión de especialidades, usuarios, médicos, pacientes, obras sociales, turnos y reportes.',
     },
     servers: [
       {
@@ -29,14 +29,49 @@ const options = {
         bearerAuth: [],
       },
     ],
-    // ---------------------------------------------------------
+    tags: [
+      {
+        name: 'Autenticación',
+        description: 'Endpoints de login y autenticación',
+      },
+      {
+        name: 'Especialidades',
+        description: 'CRUD de especialidades médicas',
+      },
+      {
+        name: 'Usuarios',
+        description: 'Gestión de usuarios del sistema',
+      },
+      {
+        name: 'Médicos',
+        description: 'Gestión de perfiles de médicos',
+      },
+      {
+        name: 'Pacientes',
+        description: 'Gestión de perfiles de pacientes',
+      },
+      {
+        name: 'Obras Sociales',
+        description: 'CRUD de obras sociales',
+      },
+      {
+        name: 'Turnos',
+        description: 'Gestión de turnos y reservas',
+      },
+      {
+        name: 'Reportes',
+        description: 'Generación de reportes y estadísticas',
+      },
+    ],
   },
-  apis: ['./src/routes/**/*.js'], 
+  apis: ['./src/routes/**/*.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 export const setupSwagger = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  console.log('✅ Documentación disponible en http://localhost:3000/api-docs');
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'TFI Grupo M - API Docs',
+  }));
+  console.log('Documentación disponible en http://localhost:3000/api-docs');
 };
