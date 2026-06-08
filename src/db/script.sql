@@ -235,27 +235,11 @@ CREATE TABLE `v_pacientes` (
 -- --------------------------------------------------------
 
 --
--- Estructura para la vista `v_medicos` se corrigió ya que era una copia de v_pacientes.
+-- Estructura para la vista `v_medicos`
 --
-DROP TABLE IF EXISTS v_medicos;
-CREATE ALGORITHM=UNDEFINED DEFINER=root@localhost SQL SECURITY DEFINER VIEW v_medicos AS 
-SELECT 
-    m.id_medico, 
-    m.id_usuario, 
-    u.apellido, 
-    u.nombres, 
-    u.email, 
-    m.id_especialidad, 
-    e.nombre AS especialidad, 
-    m.matricula, 
-    m.descripcion, 
-    m.valor_consulta, 
-    u.foto_path 
-FROM medicos m 
-JOIN usuarios u ON m.id_usuario = u.id_usuario 
-JOIN especialidades e ON m.id_especialidad = e.id_especialidad 
-WHERE u.activo = 1 AND u.rol = 1;
+DROP TABLE IF EXISTS `v_medicos`;
 
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `u`.`foto_path` AS `foto_path` FROM (`medicos` `m` join `usuarios` `u` on(`m`.`id_usuario` = `u`.`id_usuario`)) WHERE `u`.`activo` = 1 ;
 
 -- --------------------------------------------------------
 
