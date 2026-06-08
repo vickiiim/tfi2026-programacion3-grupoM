@@ -69,3 +69,8 @@ export const actualizarEspecialidad = async (idMedico, idEspecialidad) => {
         id_especialidad_nueva: idEspecialidad
     };
 };
+
+export const crearMedico = async (datosMedico) => {
+    const idNuevoMedico = await medicosData.crearMedico(datosMedico);
+    return idNuevoMedico;
+};

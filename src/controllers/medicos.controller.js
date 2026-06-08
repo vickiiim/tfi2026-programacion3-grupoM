@@ -22,7 +22,7 @@ export const obtenerPorEspecialidad = async (req, res, next) => {
 export const asociarObrasSociales = async (req, res, next) => {
     try {
         const { id_medico } = req.params;
-        const { obras_sociales } = req.body; // Esto debe ser un array ej: [7-9]
+        const { obras_sociales } = req.body; // Esto debe ser un array ej: [6-8]
 
         const resultado = await medicosService.asociarObrasSociales(id_medico, obras_sociales);
         
@@ -49,6 +49,25 @@ export const actualizarEspecialidad = async (req, res, next) => {
         if(error.message.includes("Verifique que el ID del médico")) {
             return res.status(404).json({ estado: false, mensaje: error.message });
         }
+        next(error);
+    }
+};
+
+export const crearMedico = async (req, res, next) => {
+    try {
+        const datosMedico = req.body;
+
+        const idNuevoMedico = await medicosService.crearMedico(datosMedico);
+
+        res.status(201).json({
+            estado: true,
+            mensaje: 'Usuario convertido a médico con éxito',
+            data: { 
+                id_medico: idNuevoMedico, 
+                ...datosMedico 
+            }
+        });
+    } catch (error) {
         next(error);
     }
 };

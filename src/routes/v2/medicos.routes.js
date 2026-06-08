@@ -7,7 +7,8 @@ import {
     obtenerTodos, 
     obtenerPorEspecialidad, 
     asociarObrasSociales,
-    actualizarEspecialidad
+    actualizarEspecialidad,
+    crearMedico
 } from '../../controllers/medicos.controller.js';
 
 const router = express.Router();
@@ -165,5 +166,57 @@ router.patch(
     ],
     actualizarEspecialidad
 );
+
+/**
+ * @swagger
+ * /api/v2/medicos:
+ *   post:
+ *     summary: Convierte a un usuario existente en médico
+ *     tags: [Médicos]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_usuario
+ *               - id_especialidad
+ *               - matricula
+ *               - valor_consulta
+ *             properties:
+ *               id_usuario:
+ *                 type: integer
+ *                 description: ID del usuario existente en la tabla usuarios.
+ *               id_especialidad:
+ *                 type: integer
+ *                 description: ID de la especialidad del médico.
+ *               matricula:
+ *                 type: integer
+ *               descripcion:
+ *                 type: string
+ *               valor_consulta:
+ *                 type: number
+ *                 format: float
+ *     responses:
+ *       201:
+ *         description: Usuario convertido a médico exitosamente
+ *       400:
+ *         description: Error en la validación de los datos enviados
+ *       401:
+ *         description: No autorizado (Falta token o es inválido)
+ *       403:
+ *         description: Prohibido (No tiene rol de Administrador)
+ */
+router.post('/', [
+    validarJWT, 
+    esAdmin,
+    check('id_usuario', 'El ID del usuario es obligatorio y debe ser entero').isInt(),
+    check('id_especialidad', 'La especialidad es obligatoria y debe ser entera').isInt(),
+    check('matricula', 'La matrícula es obligatoria').not().isEmpty(),
+    check('valor_consulta', 'El valor de la consulta es obligatorio').isNumeric(),
+    check('descripcion', 'La descripción no puede estar vacía').optional().isString(),
+    validarCampos 
+], crearMedico);
 
 export default router;

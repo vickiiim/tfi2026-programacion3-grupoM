@@ -2,7 +2,10 @@ import jwt from 'jsonwebtoken';
 import { 
     login as loginService, 
     registrarUsuario,
-    actualizarRolUsuario 
+    actualizarRolUsuario,
+    actualizarDatosPersonales as actualizarDatosService, 
+    eliminarUsuario as eliminarUserService,             
+    actualizarFoto as actualizarFotoService              
 } from '../services/usuarios.service.js';
 
 export const login = async (req, res, next) => { 
@@ -35,13 +38,10 @@ export const login = async (req, res, next) => {
 
 export const register = async (req, res, next) => {
     try {
-        // Obtenemos los datos desde el body
-        const { nombres, apellido, documento, email, password } = req.body;
+        const { nombres, apellido, documento, email, password, id_obra_social } = req.body;
         
-        // Si subieron una foto con multer, guardamos el nombre del archivo
-        const fotoPath = req.file ? req.file.filename : null;
+        const fotoPath = req.file ? req.file.filename : "";
 
-        // Delegamos la lógica al servicio, forzando rol: 2 (Paciente)
         const nuevoUsuario = await registrarUsuario({
             nombres,
             apellido,
@@ -49,13 +49,13 @@ export const register = async (req, res, next) => {
             email,
             contrasenia: password, 
             foto_path: fotoPath,
-            rol: 2
+            rol: 2,
+            id_obra_social 
         });
 
-        // Respondemos con 201 Created
         res.status(201).json({
             estado: true,
-            mensaje: 'Usuario registrado con éxito',
+            mensaje: 'Paciente registrado con éxito',
             data: nuevoUsuario
         });
 
@@ -70,7 +70,7 @@ export const actualizarRol = async (req, res, next) => {
         const { rol } = req.body;
 
         // VALIDACIÓN: Verificar si el rol es 1, 2 o 3
-        if (![1, 2, 3].includes(Number(rol))) { 
+        if (![1-3].includes(Number(rol))) { 
             return res.status(400).json({ 
                 estado: false, 
                 mensaje: "El rol proporcionado no es válido. Debe ser 1, 2 o 3." 
@@ -83,6 +83,51 @@ export const actualizarRol = async (req, res, next) => {
             estado: true,
             mensaje: `El rol del usuario ${id} ha sido actualizado con éxito`
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const actualizarDatosPersonales = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const datos = req.body;
+
+        // Llamamos al servicio usando el alias que definimos arriba
+        const resultado = await actualizarDatosService(id, datos);
+        
+        res.status(200).json({ estado: true, ...resultado });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const eliminarUsuario = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const resultado = await eliminarUserService(id);
+        
+        res.status(200).json({ estado: true, ...resultado });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const actualizarFoto = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        // Si usamos Multer, el archivo viene en req.file
+        const nombreArchivo = req.file ? req.file.filename : null;
+
+        if (!nombreArchivo) {
+            return res.status(400).json({ estado: false, mensaje: "No se proporcionó ninguna imagen para actualizar" });
+        }
+
+        const resultado = await actualizarFotoService(id, nombreArchivo);
+        
+        res.status(200).json({ estado: true, ...resultado });
     } catch (error) {
         next(error);
     }

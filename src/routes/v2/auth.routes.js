@@ -51,7 +51,7 @@ router.post('/login',
  * @swagger
  *  /api/v2/register:
  *   post:
- *     summary: Registrar un nuevo usuario en el sistema
+ *     summary: Registrar un nuevo usuario (paciente) en el sistema
  *     tags: [Autenticación]
  *     requestBody:
  *       required: true
@@ -65,6 +65,7 @@ router.post('/login',
  *               - documento
  *               - email
  *               - password
+ *               - id_obra_social
  *             properties:
  *               nombres:
  *                 type: string
@@ -78,6 +79,9 @@ router.post('/login',
  *               password:
  *                 type: string
  *                 format: password
+ *               id_obra_social:
+ *                 type: integer
+ *                 description: ID de la Obra Social del paciente (Ej. 1, 2, 3 o 4)
  *               foto:
  *                 type: string
  *                 format: binary
@@ -97,6 +101,9 @@ router.post('/register',
         check('documento', 'El documento es obligatorio').not().isEmpty(),
         check('email', 'El correo electrónico debe ser válido').isEmail(),
         check('password', 'La contraseña es obligatoria y debe tener al menos 6 caracteres').isLength({ min: 6 }),
+        check('id_obra_social', 'La obra social es obligatoria').not().isEmpty(),
+        check('id_obra_social', 'El ID de la obra social debe ser un número entero').isInt(),
+        
         validarCampos 
     ], 
     register 

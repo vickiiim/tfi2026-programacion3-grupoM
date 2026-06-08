@@ -16,7 +16,7 @@ const selectBase = `
     FROM medicos m
     INNER JOIN usuarios u ON m.id_usuario = u.id_usuario
     INNER JOIN especialidades e ON m.id_especialidad = e.id_especialidad
-    WHERE u.activo = 1
+    WHERE u.activo = 1 AND u.rol = 1
 `;
 
 export const obtenerTodos = async () => {
@@ -73,4 +73,46 @@ export const actualizarEspecialidad = async (idMedico, idEspecialidad) => {
     
     // Retorna true si se modificó el registro
     return result.affectedRows > 0; 
+};
+
+export const crearMedico = async (datosMedico) => {
+    const connection = await pool.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // 1. PRIMER PASO: Actualizar el rol del usuario a 1 (Médico)
+        const sqlActualizarRol = `UPDATE usuarios SET rol = 1 WHERE id_usuario = ?`;
+        await connection.execute(sqlActualizarRol, [datosMedico.id_usuario]);
+
+        // 2. SEGUNDO PASO: Insertar los datos complementarios en la tabla medicos
+        const sqlInsertarMedico = `
+            INSERT INTO medicos 
+            (id_usuario, id_especialidad, matricula, descripcion, valor_consulta) 
+            VALUES (?, ?, ?, ?, ?)
+        `;
+        
+        const valoresMedico = [
+            datosMedico.id_usuario,
+            datosMedico.id_especialidad,
+            datosMedico.matricula,
+            datosMedico.descripcion,
+            datosMedico.valor_consulta
+        ];
+        
+        const [result] = await connection.execute(sqlInsertarMedico, valoresMedico);
+
+        // 3. Confirmamos la transacción
+        await connection.commit();
+        
+        // Retornamos el id_medico generado autoincremental
+        return result.insertId;
+
+    } catch (error) {
+        // Si hay error en el UPDATE o el INSERT, deshacemos todo
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release(); // Liberamos la conexión para no saturar el pool
+    }
 };
