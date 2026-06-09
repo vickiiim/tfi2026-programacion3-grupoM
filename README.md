@@ -40,7 +40,7 @@ Por razones de seguridad y para mantener la integridad de la base de datos, el s
 
 ### 🛠️ Detalles de la Implementación
 
-*   **Endpoint:** `POST /api/v2/auth/registro`
+*   **Endpoint:** `POST /api/v2/registro`
 *   **Acceso (Público):** A diferencia de las rutas de gestión de la clínica, esta ruta no requiere envío de token JWT, permitiendo el acceso libre para la creación de cuentas.
 *   **Validación de Datos de Entrada:** Utilizamos la librería `express-validator` como middleware para asegurar que los datos obligatorios (como el formato correcto del email y la contraseña) estén presentes y sean válidos antes de procesarlos.
 *   **Seguridad y Criptografía:** Las contraseñas no se almacenan en texto plano. Se aplica una función de encriptación (hash SHA-256) antes de impactar en la base de datos para proteger la confidencialidad de las credenciales.
