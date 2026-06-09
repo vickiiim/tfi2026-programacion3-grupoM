@@ -26,8 +26,28 @@ En esta **primera entrega** se incluye:
 *   **Middlewares:** Multer (carga de archivos), Morgan (registro de solicitudes), Express-Validator (validación de datos), CORS.
 *   **Documentación:** Swagger.
 
-## Funcionalidad Extra
-*A definir.
+## Funcionalidad Extra: Registro de Nuevos Usuarios
+
+Como funcionalidad adicional a los requerimientos base del TFI, implementamos el **Registro de Usuarios** para permitir que nuevas personas (pacientes, médicos o administradores) puedan darse de alta en el sistema de la clínica.
+
+### Gestión de Roles y Privilegios
+
+Por razones de seguridad y para mantener la integridad de la base de datos, el sistema implementa un flujo de registro con **asignación de rol por defecto**:
+
+*   **Alta inicial por defecto (Paciente - Rol 2):** Todo usuario nuevo que se registra mediante la ruta pública ingresa automáticamente al sistema con el rol base de **Paciente**. Esto garantiza que cualquier persona externa pueda darse de alta rápidamente y comenzar a operar con los turnos.
+*   **Promoción a Médico (Rol 1):** Si la persona registrada forma parte del personal de salud, su rol debe ser actualizado a Médico. Para que este cambio sea válido en el sistema, es obligatorio **completar la información profesional faltante** (matrícula, especialidad y valor de consulta). Esta información debe cargarse a través de la ruta de gestión de médicos para crear el registro correspondiente en la tabla `medicos`, vinculándolo con su `id_usuario`.
+*   **Promoción a Administrador (Rol 3):** Para elevar los privilegios de una cuenta al nivel de Administrador, el cambio se realiza únicamente a nivel de autorización. Como los administradores no requieren información adicional en otras tablas, basta con actualizar el campo `rol` del usuario en la base de datos (ya sea de forma directa o mediante un endpoint protegido exclusivo para administradores).
+
+### 🛠️ Detalles de la Implementación
+
+*   **Endpoint:** `POST /api/v2/auth/registro`
+*   **Acceso (Público):** A diferencia de las rutas de gestión de la clínica, esta ruta no requiere envío de token JWT, permitiendo el acceso libre para la creación de cuentas.
+*   **Validación de Datos de Entrada:** Utilizamos la librería `express-validator` como middleware para asegurar que los datos obligatorios (como el formato correcto del email y la contraseña) estén presentes y sean válidos antes de procesarlos.
+*   **Seguridad y Criptografía:** Las contraseñas no se almacenan en texto plano. Se aplica una función de encriptación (hash SHA-256) antes de impactar en la base de datos para proteger la confidencialidad de las credenciales.
+*   **Diseño basado en Capas:** 
+    *   **Rutas (`routes`):** Define el endpoint y aplica los middlewares de validación.
+    *   **Controladores (`controllers`):** Captura el *request*, maneja los errores de validación, y responde al cliente con los códigos de estado HTTP correspondientes (ej. `201 Created`).
+    *   **Servicios (`services`):** Contiene la lógica de negocio, como el hasheo de la contraseña.
 
 ## Requisitos Previos
 Antes de ejecutar el proyecto, se requiere:

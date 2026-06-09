@@ -9,6 +9,8 @@ import especialidadesRouterV1 from './src/routes/v1/especialidades.routes.js';
 import pacientesRoutes from './src/routes/v2/pacientes.routes.js';
 import medicosRoutes from './src/routes/v2/medicos.routes.js';
 import turnosRoutes from './src/routes/v2/turnos.routes.js';
+import reportesRoutesV2 from './src/routes/v2/reportes.routes.js'; 
+
 
 
 import corsMiddleware from './src/middlewares/cors.middleware.js';
@@ -34,7 +36,9 @@ app.use('/api/v2/pacientes', pacientesRoutes);
 app.use('/api/v2/medicos', medicosRoutes);
 app.use('/api/v2/turnos', turnosRoutes);
 app.use('/api/v2/usuarios', usuariosRoutes);
-app.use('/api/v2', authRoutes);
+app.use('/api/v2/auth', authRoutes); 
+app.use('/api/v2/reportes', reportesRoutesV2);
+
 
 // --- CONFIGURACIÓN DE ESTÁTICOS (MULTER) ---
 app.use('/uploads', express.static('uploads'));

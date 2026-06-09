@@ -49,7 +49,6 @@ const router = express.Router();
  */
 router.put('/:id/rol', [validarJWT, esAdmin], actualizarRol);
 
-// 👇 ¡NUEVAS RUTAS AGREGADAS ABAJO! 👇
 
 /**
  * @swagger
