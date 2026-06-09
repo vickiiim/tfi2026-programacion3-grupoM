@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { param } from 'express-validator';
 import * as pacientesController from '../../controllers/pacientes.controller.js';
-import upload from '../../middlewares/multer.middleware.js'; 
+import upload from '../../middlewares/multerConfig.js'; 
 import validarJWT from '../../middlewares/validar_jwt.js'; 
 import { validarRoles } from '../../middlewares/validar_roles.js';
 import validarCampos from '../../middlewares/validar_campos.js';
