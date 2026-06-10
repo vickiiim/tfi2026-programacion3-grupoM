@@ -12,31 +12,33 @@ const selectBase = `
     FROM turnos_reservas tr
 `;
 
-// 1. Listar turnos por Medico 
-export const obtenerTurnosPorUsuarioMedico = async (id_usuario) => {
-    // Usamos directamente la constante selectBase
+// 1. Listar turnos por Medico (Con paginación)
+export const obtenerTurnosPorUsuarioMedico = async (id_usuario, limite = 10, offset = 0) => {
     const sql = selectBase + `
         INNER JOIN medicos m ON tr.id_medico = m.id_medico
         WHERE m.id_usuario = ? AND tr.activo = 1
+        LIMIT ? OFFSET ?
     `;
-    const [turnos] = await pool.query(sql, [id_usuario]);
+    // IMPORTANTE: Convertimos a Number() porque si llega como texto desde la URL, mysql2 tira error de sintaxis
+    const [turnos] = await pool.query(sql, [id_usuario, Number(limite), Number(offset)]);
     return turnos;
 };
 
-// 2. Listar turnos por Paciente
-export const obtenerTurnosPorUsuarioPaciente = async (id_usuario) => {
+// 2. Listar turnos por Paciente (Con paginación)
+export const obtenerTurnosPorUsuarioPaciente = async (id_usuario, limite = 10, offset = 0) => {
     const sql = selectBase + `
         INNER JOIN pacientes p ON tr.id_paciente = p.id_paciente
         WHERE p.id_usuario = ? AND tr.activo = 1
+        LIMIT ? OFFSET ?
     `;
-    const [turnos] = await pool.query(sql, [id_usuario]);
+    const [turnos] = await pool.query(sql, [id_usuario, Number(limite), Number(offset)]);
     return turnos;
 };
 
-// 3. Buscar todos los turnos activos (Para Administrador)
-export const obtenerTodos = async () => {
-    const sql = selectBase + ` WHERE tr.activo = 1 `;
-    const [rows] = await pool.query(sql);
+// 3. Buscar todos los turnos activos (Para Administrador - Con paginación)
+export const obtenerTodos = async (limite = 10, offset = 0) => {
+    const sql = selectBase + ` WHERE tr.activo = 1 LIMIT ? OFFSET ?`;
+    const [rows] = await pool.query(sql, [Number(limite), Number(offset)]);
     return rows;
 };
 

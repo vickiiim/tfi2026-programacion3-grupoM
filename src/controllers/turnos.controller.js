@@ -5,8 +5,13 @@ export const obtenerTurnosPropios = async (req, res, next) => {
     try {
         const id_usuario = req.usuario.id_usuario; 
         const rol = req.usuario.rol; 
+        
+        // 1. Capturamos limit y offset de la URL. Si no existen, usamos 10 y 0 por defecto.
+        const limit = req.query.limit || 10;
+        const offset = req.query.offset || 0;
 
-        const turnos = await turnosService.obtenerTurnosPropios(id_usuario, rol);
+        // 2. Se los enviamos al servicio
+        const turnos = await turnosService.obtenerTurnosPropios(id_usuario, rol, limit, offset);
 
         res.status(200).json({ estado: true, data: turnos });
     } catch (error) {
@@ -17,7 +22,12 @@ export const obtenerTurnosPropios = async (req, res, next) => {
 // Obtener todos los turnos
 export const obtenerTodos = async (req, res, next) => {
     try {
-        const turnos = await turnosService.obtenerTodos();
+        // 1. Capturamos limit y offset de la URL. Si no existen, usamos 10 y 0 por defecto.
+        const limit = req.query.limit || 10;
+        const offset = req.query.offset || 0;
+
+        // 2. Se los enviamos al servicio
+        const turnos = await turnosService.obtenerTodos(limit, offset);
 
         res.status(200).json({ estado: true, data: turnos });
     } catch (error) {
