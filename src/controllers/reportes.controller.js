@@ -10,7 +10,7 @@ const generarPDF = async (req, res, next) => {
         res.setHeader('Content-Disposition', 'attachment; filename="reporte_turnos.pdf"');
         res.setHeader('Content-Length', pdfBuffer.length);
 
-        return res.send(pdfBuffer);
+        return res.status(200).send(pdfBuffer);
     } catch (error) {
         next(error);
     }
