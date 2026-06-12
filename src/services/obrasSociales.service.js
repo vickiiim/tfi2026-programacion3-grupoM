@@ -1,7 +1,8 @@
 import { getAll, getById, create, update, remove } from '../models/obrasSociales.model.js';
 
-const getAllObrasSociales = async () => {
-    const obrasBD = await getAll();
+const getAllObrasSociales = async (limit, offset) => {
+    // 1. Recibimos limit y offset del controlador y se los pasamos al modelo
+    const obrasBD = await getAll(limit, offset);
     
     return obrasBD.map(obra => ({
         id_obra_social: obra.id_obra_social,
@@ -16,7 +17,8 @@ const getObraSocialById = async (id) => {
     const obraBD = await getById(id);
     if (!obraBD || obraBD.length === 0) throw { status: 404, message: 'Obra social no encontrada' };
     
-    const obra = obraBD; // Asumiendo que getById devuelve un array
+    // 2. Como getById devuelve un array (rows), extraemos el primer elemento 
+    const obra = obraBD; 
     
     return {
         id_obra_social: obra.id_obra_social,
@@ -35,7 +37,9 @@ const createObraSocial = async (nombre, descripcion, porcentaje_descuento, es_pa
 };
 
 const updateObraSocial = async (id, nombre, descripcion, porcentaje_descuento, es_particular) => {
+    // Reutilizamos la función getObraSocialById para verificar si existe (¡Excelente práctica!)
     await getObraSocialById(id);
+    
     if (!nombre) throw { status: 400, message: 'El nombre es obligatorio' };
     await update(id, nombre, descripcion, porcentaje_descuento, es_particular);
     
@@ -44,6 +48,7 @@ const updateObraSocial = async (id, nombre, descripcion, porcentaje_descuento, e
 };
 
 const deleteObraSocial = async (id) => {
+    // Verificamos si existe antes de borrar
     await getObraSocialById(id);
     await remove(id);
     return { message: 'Obra social eliminada correctamente' };

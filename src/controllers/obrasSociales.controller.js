@@ -2,7 +2,13 @@ import { getAllObrasSociales, getObraSocialById, createObraSocial, updateObraSoc
 
 const getAll = async (req, res, next) => {
     try {
-        const data = await getAllObrasSociales();
+        // Capturamos el limit y el offset desde los Query Params de la URL
+        const limit = req.query.limit ? Number(req.query.limit) : 10;
+        const offset = req.query.offset ? Number(req.query.offset) : 0;
+
+        // Pasamos los parámetros de paginación al servicio
+        const data = await getAllObrasSociales(limit, offset);
+        
         res.status(200).json({ estado: true, datos: data });
     } catch (error) { next(error); }
 };
@@ -16,6 +22,7 @@ const getById = async (req, res, next) => {
 
 const create = async (req, res, next) => {
     try {
+        // DTO armado directamente en el controlador (Enfoque elegido)
         const dtoEntrada = {
             nombre: req.body.nombre,
             descripcion: req.body.descripcion,
@@ -30,6 +37,7 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
     try {
+        // DTO armado directamente en el controlador
         const dtoEntrada = {
             nombre: req.body.nombre,
             descripcion: req.body.descripcion,

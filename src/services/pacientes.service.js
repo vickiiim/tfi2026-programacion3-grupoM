@@ -11,8 +11,10 @@ const formatPacienteDTO = (pacienteBD) => ({
     foto: pacienteBD.foto_path
 });
 
-export const obtenerTodos = async () => {
-    const pacientesBD = await pacientesData.obtenerTodos();
+// 1. Recibimos limit y offset desde el controlador
+export const obtenerTodos = async (limit, offset) => {
+    // 2. Se los pasamos al modelo para que aplique el límite en la consulta SQL
+    const pacientesBD = await pacientesData.obtenerTodos(limit, offset);
     return pacientesBD.map(formatPacienteDTO);
 };
 
@@ -20,7 +22,7 @@ export const obtenerPorId = async (id) => {
     const pacienteBD = await pacientesData.obtenerPorId(id);
     
     if (pacienteBD && pacienteBD.length > 0) {
-        return formatPacienteDTO(pacienteBD[0]); 
+        return formatPacienteDTO(pacienteBD); 
     }
     
     return null;
@@ -33,7 +35,7 @@ export const actualizar = async (id, datos) => {
         throw new Error(`No se encontró el paciente con ID: ${id}`);
     }
     
-    const idUsuario = pacienteBD[0].id_usuario;
+    const idUsuario = pacienteBD.id_usuario;
     const resultado = await pacientesData.actualizar(idUsuario, datos);
     
     if (resultado === 0) {
@@ -50,7 +52,7 @@ export const subirFoto = async (idPaciente, nombreArchivo) => {
         throw new Error(`No se encontró el paciente con ID: ${idPaciente}`);
     }
     
-    const idUsuario = pacienteBD[0].id_usuario;
+    const idUsuario = pacienteBD.id_usuario;
     const resultado = await pacientesData.actualizarFoto(idUsuario, nombreArchivo);
     
     if (resultado === 0) {
@@ -67,7 +69,7 @@ export const eliminar = async (id) => {
         throw new Error(`No se encontró el paciente con ID: ${id}`);
     }
     
-    const idUsuario = pacienteBD[0].id_usuario;
+    const idUsuario = pacienteBD.id_usuario;
     const resultado = await pacientesData.eliminar(idUsuario);
     
     if (resultado === 0) {

@@ -1,8 +1,12 @@
 import pool from '../db/conexion.js';
 
 // Listar todas las obras sociales activas
-const getAll = async () => {
-    const [rows] = await pool.query('SELECT * FROM obras_sociales WHERE activo = 1');
+const getAll = async (limit, offset) => {
+    // Agregamos LIMIT ? y OFFSET ? al final de tu consulta
+    const sql = 'SELECT * FROM obras_sociales WHERE activo = 1 LIMIT ? OFFSET ?';
+    
+    // Ejecutamos la consulta pasando limit y offset como números para mayor seguridad
+    const [rows] = await pool.query(sql, [Number(limit), Number(offset)]);
     return rows;
 };
 
@@ -38,6 +42,5 @@ const remove = async (id) => {
     );
     return result.affectedRows;
 };
-
 
 export { getAll, getById, create, update, remove };

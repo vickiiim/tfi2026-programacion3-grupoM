@@ -19,18 +19,23 @@ const selectBase = `
     WHERE u.activo = 1 AND u.rol = 1
 `;
 
-export const obtenerTodos = async () => {
-    const [rows] = await pool.execute(selectBase);
+// 1. Agregamos limit y offset a obtenerTodos
+export const obtenerTodos = async (limit, offset) => {
+    // Concatenamos LIMIT y OFFSET a la consulta base usando parámetros seguros (?)
+    const sql = selectBase + ` LIMIT ? OFFSET ?`;
+    
+    const [rows] = await pool.execute(sql, [Number(limit), Number(offset)]);
     return rows;
 };
 
-export const obtenerPorEspecialidad = async (idEspecialidad) => {
-    const sql = selectBase + ` AND m.id_especialidad = ?`;
-    const [rows] = await pool.execute(sql, [idEspecialidad]);
+// 2. También agregamos paginación a la búsqueda por especialidad
+export const obtenerPorEspecialidad = async (idEspecialidad, limit, offset) => {
+    const sql = selectBase + ` AND m.id_especialidad = ? LIMIT ? OFFSET ?`;
+    const [rows] = await pool.execute(sql, [idEspecialidad, Number(limit), Number(offset)]);
     return rows;
 };
 
-// Validar si el médico ya tiene esa obra social (Regla de negocio pedida por Cristian)
+// Validar si el médico ya tiene esa obra social
 export const verificarAsociacion = async (idMedico, idObraSocial) => {
     const sql = `SELECT * FROM medicos_obras_sociales WHERE id_medico = ? AND id_obra_social = ? AND activo = 1`;
     const [rows] = await pool.execute(sql, [idMedico, idObraSocial]);
@@ -58,7 +63,7 @@ export const asociarObrasSociales = async (idMedico, obrasSocialesIds) => {
         await connection.rollback(); // Si falla 1, deshacemos TODO
         throw error;
     } finally {
-        connection.release(); // Siempre liberamos la conexión
+        connection.release(); 
     }
 };
 
@@ -71,10 +76,10 @@ export const actualizarEspecialidad = async (idMedico, idEspecialidad) => {
     `;
     const [result] = await pool.execute(sql, [idEspecialidad, idMedico]);
     
-    // Retorna true si se modificó el registro
     return result.affectedRows > 0; 
 };
 
+// Función crearMedico 
 export const crearMedico = async (datosMedico) => {
     const connection = await pool.getConnection();
     
@@ -105,14 +110,15 @@ export const crearMedico = async (datosMedico) => {
         // 3. Confirmamos la transacción
         await connection.commit();
         
-        // Retornamos el id_medico generado autoincremental
+        // Retornamos el ID insertado
         return result.insertId;
 
     } catch (error) {
-        // Si hay error en el UPDATE o el INSERT, deshacemos todo
+        // 4. Si algo falla 
         await connection.rollback();
         throw error;
     } finally {
-        connection.release(); // Liberamos la conexión para no saturar el pool
+        // 5. Siempre devolvemos la conexión al pool
+        connection.release();
     }
 };

@@ -38,7 +38,7 @@ Por razones de seguridad y para mantener la integridad de la base de datos, el s
 *   **Promoción a Médico (Rol 1):** Si la persona registrada forma parte del personal de salud, su rol debe ser actualizado a Médico. Para que este cambio sea válido en el sistema, es obligatorio **completar la información profesional faltante** (matrícula, especialidad y valor de consulta). Esta información debe cargarse a través de la ruta de gestión de médicos para crear el registro correspondiente en la tabla `medicos`, vinculándolo con su `id_usuario`.
 *   **Promoción a Administrador (Rol 3):** Para elevar los privilegios de una cuenta al nivel de Administrador, el cambio se realiza únicamente a nivel de autorización. Como los administradores no requieren información adicional en otras tablas, basta con actualizar el campo `rol` del usuario en la base de datos (ya sea de forma directa o mediante un endpoint protegido exclusivo para administradores).
 
-### 🛠️ Detalles de la Implementación
+### Detalles de la Implementación
 
 *   **Endpoint:** `POST /api/v2/registro`
 *   **Acceso (Público):** A diferencia de las rutas de gestión de la clínica, esta ruta no requiere envío de token JWT, permitiendo el acceso libre para la creación de cuentas.

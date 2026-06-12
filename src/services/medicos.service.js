@@ -21,13 +21,15 @@ const formatMedicoDTO = (medicoCrudo) => {
     };
 };
 
-export const obtenerTodos = async () => {
-    const medicos = await medicosData.obtenerTodos();
+export const obtenerTodos = async (limit, offset) => {
+    // Recibe limit y offset del controlador y se los pasa al modelo
+    const medicos = await medicosData.obtenerTodos(limit, offset);
     return medicos.map(formatMedicoDTO);
 };
 
-export const obtenerPorEspecialidad = async (idEspecialidad) => {
-    const medicos = await medicosData.obtenerPorEspecialidad(idEspecialidad);
+export const obtenerPorEspecialidad = async (idEspecialidad, limit, offset) => {
+    // Recibe los parámetros de paginación junto con el ID
+    const medicos = await medicosData.obtenerPorEspecialidad(idEspecialidad, limit, offset);
     return medicos.map(formatMedicoDTO);
 };
 

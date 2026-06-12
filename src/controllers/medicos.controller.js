@@ -2,7 +2,13 @@ import * as medicosService from '../services/medicos.service.js';
 
 export const obtenerTodos = async (req, res, next) => {
     try {
-        const medicos = await medicosService.obtenerTodos();
+        // 1. Capturamos limit y offset de los Query Params con valores por defecto (ej: 10 y 0)
+        const limit = req.query.limit ? Number(req.query.limit) : 10;
+        const offset = req.query.offset ? Number(req.query.offset) : 0;
+
+        // 2. Pasamos los parámetros al servicio
+        const medicos = await medicosService.obtenerTodos(limit, offset);
+        
         res.status(200).json({ estado: true, data: medicos });
     } catch (error) {
         next(error);
@@ -12,7 +18,14 @@ export const obtenerTodos = async (req, res, next) => {
 export const obtenerPorEspecialidad = async (req, res, next) => {
     try {
         const { id_especialidad } = req.params;
-        const medicos = await medicosService.obtenerPorEspecialidad(id_especialidad);
+        
+        // 1. Capturamos limit y offset de los Query Params para esta búsqueda filtrada
+        const limit = req.query.limit ? Number(req.query.limit) : 10;
+        const offset = req.query.offset ? Number(req.query.offset) : 0;
+
+        // 2. Pasamos el ID y los parámetros de paginación al servicio
+        const medicos = await medicosService.obtenerPorEspecialidad(id_especialidad, limit, offset);
+        
         res.status(200).json({ estado: true, data: medicos });
     } catch (error) {
         next(error);
@@ -22,13 +35,12 @@ export const obtenerPorEspecialidad = async (req, res, next) => {
 export const asociarObrasSociales = async (req, res, next) => {
     try {
         const { id_medico } = req.params;
-        const { obras_sociales } = req.body; // Esto debe ser un array ej: [6-8]
+        const { obras_sociales } = req.body; // Esto debe ser un array ej: [8-10]
 
         const resultado = await medicosService.asociarObrasSociales(id_medico, obras_sociales);
         
         res.status(201).json({ estado: true, data: resultado });
     } catch (error) {
-        // Si el error es nuestra regla de negocio, devolvemos un 400
         if(error.message.includes("ya estaban asociadas")) {
             return res.status(400).json({ estado: false, mensaje: error.message });
         }
@@ -43,7 +55,6 @@ export const actualizarEspecialidad = async (req, res, next) => {
 
         const resultado = await medicosService.actualizarEspecialidad(id_medico, id_especialidad);
         
-        // Respondemos con código 200 OK para actualizaciones exitosas
         res.status(200).json({ estado: true, data: resultado });
     } catch (error) {
         if(error.message.includes("Verifique que el ID del médico")) {

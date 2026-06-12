@@ -2,8 +2,15 @@ import * as pacientesService from '../services/pacientes.service.js';
 
 export const obtenerTodos = async (req, res, next) => {
     try {
-        const pacientes = await pacientesService.obtenerTodos();
-        res.status(200).json(pacientes);
+        // 1. Capturamos los parámetros de paginación para el GET
+        const limit = req.query.limit ? Number(req.query.limit) : 10;
+        const offset = req.query.offset ? Number(req.query.offset) : 0;
+
+        // Pasamos la paginación al servicio
+        const pacientes = await pacientesService.obtenerTodos(limit, offset);
+        
+        // 2. Consistencia en la respuesta (estado: true, data: ...)
+        res.status(200).json({ estado: true, data: pacientes });
     } catch (error) {
         next(error);
     }
@@ -14,11 +21,12 @@ export const obtenerPorId = async (req, res, next) => {
         const { id } = req.params;
         const paciente = await pacientesService.obtenerPorId(id);
         
-        if (!paciente) {
+        if (!paciente || paciente.length === 0) {
             return res.status(404).json({ estado: false, mensaje: 'Paciente no encontrado' });
         }
         
-        res.status(200).json(paciente);
+        // Consistencia en la respuesta
+        res.status(200).json({ estado: true, data: paciente });
     } catch (error) {
         next(error);
     }
@@ -27,9 +35,17 @@ export const obtenerPorId = async (req, res, next) => {
 export const actualizar = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const datos = req.body; 
         
-        await pacientesService.actualizar(id, datos);
+        // 3. IMPLEMENTACIÓN DEL DTO DE ENTRADA
+        // Filtramos estrictamente los datos, ignorando cualquier otro campo malicioso del body
+        const dtoActualizar = {
+            apellido: req.body.apellido,
+            nombres: req.body.nombres,
+            email: req.body.email
+        }; 
+        
+        // Pasamos el DTO limpio al servicio
+        await pacientesService.actualizar(id, dtoActualizar);
         
         res.status(200).json({ 
             estado: true, 
