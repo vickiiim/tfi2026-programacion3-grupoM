@@ -18,7 +18,7 @@ const getObraSocialById = async (id) => {
     if (!obraBD || obraBD.length === 0) throw { status: 404, message: 'Obra social no encontrada' };
     
     // 2. Como getById devuelve un array (rows), extraemos el primer elemento 
-    const obra = obraBD[0]; 
+    const obra = obraBD; 
     
     return {
         id_obra_social: obra.id_obra_social,

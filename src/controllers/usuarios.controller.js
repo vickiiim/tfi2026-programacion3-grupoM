@@ -70,7 +70,7 @@ export const actualizarRol = async (req, res, next) => {
         const { rol } = req.body;
 
         // VALIDACIÓN: Verificar si el rol es 1, 2 o 3
-        if (![1-3].includes(Number(rol))) { 
+        if (![1, 2, 3].includes(Number(rol))) { 
             return res.status(400).json({ 
                 estado: false, 
                 mensaje: "El rol proporcionado no es válido. Debe ser 1, 2 o 3." 
