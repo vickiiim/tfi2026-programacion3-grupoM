@@ -22,7 +22,7 @@ export const obtenerPorId = async (id) => {
     const pacienteBD = await pacientesData.obtenerPorId(id);
     
     if (pacienteBD && pacienteBD.length > 0) {
-        return formatPacienteDTO(pacienteBD); 
+        return formatPacienteDTO(pacienteBD[0]); 
     }
     
     return null;
@@ -35,7 +35,7 @@ export const actualizar = async (id, datos) => {
         throw new Error(`No se encontró el paciente con ID: ${id}`);
     }
     
-    const idUsuario = pacienteBD.id_usuario;
+    const idUsuario = pacienteBD[0].id_usuario;
     const resultado = await pacientesData.actualizar(idUsuario, datos);
     
     if (resultado === 0) {
@@ -52,7 +52,7 @@ export const subirFoto = async (idPaciente, nombreArchivo) => {
         throw new Error(`No se encontró el paciente con ID: ${idPaciente}`);
     }
     
-    const idUsuario = pacienteBD.id_usuario;
+    const idUsuario = pacienteBD[0].id_usuario;
     const resultado = await pacientesData.actualizarFoto(idUsuario, nombreArchivo);
     
     if (resultado === 0) {
@@ -69,7 +69,7 @@ export const eliminar = async (id) => {
         throw new Error(`No se encontró el paciente con ID: ${id}`);
     }
     
-    const idUsuario = pacienteBD.id_usuario;
+    const idUsuario = pacienteBD[0].id_usuario;
     const resultado = await pacientesData.eliminar(idUsuario);
     
     if (resultado === 0) {

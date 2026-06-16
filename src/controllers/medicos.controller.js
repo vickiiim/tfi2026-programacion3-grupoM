@@ -35,7 +35,7 @@ export const obtenerPorEspecialidad = async (req, res, next) => {
 export const asociarObrasSociales = async (req, res, next) => {
     try {
         const { id_medico } = req.params;
-        const { obras_sociales } = req.body; // Esto debe ser un array ej: [8-10]
+        const { obras_sociales } = req.body; // Esto debe ser un array ej: [4-6]
 
         const resultado = await medicosService.asociarObrasSociales(id_medico, obras_sociales);
         
@@ -79,6 +79,25 @@ export const crearMedico = async (req, res, next) => {
             }
         });
     } catch (error) {
+        // Interceptamos el error de clave duplicada de MySQL
+        if (error.code === 'ER_DUP_ENTRY' || (error.message && error.message.includes('Duplicate entry'))) {
+            
+            // Verificamos cuál fue el campo exacto que saltó como duplicado
+            if (error.message.includes('matricula')) {
+                return res.status(400).json({ estado: false, mensaje: 'La matrícula ingresada ya pertenece a otro profesional' });
+            }
+            if (error.message.includes('email')) {
+                return res.status(400).json({ estado: false, mensaje: 'El email ingresado ya se encuentra registrado' });
+            }
+            if (error.message.includes('documento')) {
+                return res.status(400).json({ estado: false, mensaje: 'El documento ingresado ya se encuentra registrado' });
+            }
+
+            // Respuesta genérica por si salta una clave que no contemplamos
+            return res.status(400).json({ estado: false, mensaje: 'El registro contiene datos que ya existen en el sistema' });
+        }
+        
+        // Si es otro tipo de error, lo pasamos al manejador global (500)
         next(error);
     }
 };

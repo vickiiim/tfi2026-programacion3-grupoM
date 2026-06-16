@@ -52,6 +52,17 @@ export const actualizar = async (req, res, next) => {
             mensaje: 'Datos del paciente actualizados con éxito' 
         });
     } catch (error) {
+        // 4. CAPTURA DE ERRORES DE MYSQL (Duplicados)
+        if (error.code === 'ER_DUP_ENTRY' || (error.message && error.message.includes('Duplicate entry'))) {
+            if (error.message.includes('email')) {
+                return res.status(400).json({ estado: false, mensaje: 'El email ingresado ya se encuentra registrado por otro usuario' });
+            }
+            if (error.message.includes('documento')) {
+                return res.status(400).json({ estado: false, mensaje: 'El documento ingresado ya se encuentra registrado' });
+            }
+            return res.status(400).json({ estado: false, mensaje: 'El registro contiene datos que ya existen en el sistema' });
+        }
+        
         next(error);
     }
 };
